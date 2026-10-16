@@ -1,0 +1,17 @@
+<div style="max-width: 400px; margin: 100px auto; padding: 20px; border: 1px solid #ccc; font-family: sans-serif;">
+  <h2 style="text-align: center;">Iniciar Sesión</h2>
+
+  <div style="display: flex; flex-direction: column; gap: 15px;">
+    <input type="text" placeholder="Usuario" [(ngModel)]="credenciales.username" style="padding: 10px;">
+
+    <input type="password" placeholder="Contraseña" [(ngModel)]="credenciales.password" (keyup.enter)="iniciarSesion()" style="padding: 10px;">
+
+    <button (click)="iniciarSesion()" style="padding: 10px; background-color: #007bff; color: white; border: none; cursor: pointer;">
+      Ingresar
+    </button>
+  </div>
+
+  <p *ngIf="mensajeError" style="color: red; text-align: center; margin-top: 15px;">
+    {{ mensajeError }}
+  </p>
+</div>

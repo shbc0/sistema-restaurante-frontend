@@ -1,0 +1,70 @@
+<div style="display: flex; gap: 20px; padding: 20px; font-family: sans-serif; max-width: 1200px; margin: auto;">
+
+  <!-- Lado Izquierdo: Menú -->
+  <div style="flex: 2;">
+    <h2>Menú de Platos</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
+      @for (plato of platos; track $index) {
+        <div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px; text-align: center; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+          <h4 style="margin: 0 0 10px 0;">{{ plato.nombre }}</h4>
+          <p style="color: #28a745; font-weight: bold; margin: 0 0 15px 0;">S/ {{ plato.precio }}</p>
+          <button (click)="agregarAlCarrito(plato)" style="background: #007bff; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px; width: 100%;">
+            Agregar
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div style="flex: 1; background: #f9f9f9; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+    <h2 style="margin-top: 0;">Nueva Orden</h2>
+
+    <div style="margin-bottom: 15px;">
+      <label style="display: block; margin-bottom: 5px; font-weight: bold;">Mesa:</label>
+      <select [(ngModel)]="mesaSeleccionada" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+        <option [ngValue]="null">Seleccione una mesa</option>
+        <option *ngFor="let m of mesas" [ngValue]="m">Mesa {{ m.numero }} (Capacidad: {{m.capacidad}})</option>
+      </select>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <label style="display: block; margin-bottom: 5px; font-weight: bold;">Mesero:</label>
+      <select [(ngModel)]="usuarioSeleccionado" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+        <option [ngValue]="null">Seleccione el mesero</option>
+        <option *ngFor="let u of usuarios" [ngValue]="u">{{ u.username }} ({{u.rol}})</option>
+      </select>
+    </div>
+
+    <h4 style="border-bottom: 1px solid #ccc; padding-bottom: 10px;">Detalle del Pedido</h4>
+
+    <div style="min-height: 250px;">
+      @for (item of carrito; track $index) {
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed #ccc;">
+          <div style="flex: 1;">
+            <strong style="display: block; font-size: 0.9em;">{{ item.plato.nombre }}</strong>
+            <small style="color: #666;">S/ {{ item.precioUnitario }} c/u</small>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button (click)="reducirCantidad($index)" style="padding: 2px 8px; cursor: pointer; border: 1px solid #ccc; background: white; border-radius: 4px;">-</button>
+            <span style="font-weight: bold; width: 20px; text-align: center;">{{ item.cantidad }}</span>
+            <button (click)="agregarAlCarrito(item.plato)" style="padding: 2px 8px; cursor: pointer; border: 1px solid #ccc; background: white; border-radius: 4px;">+</button>
+          </div>
+          <div style="margin-left: 15px; font-weight: bold; width: 60px; text-align: right;">
+            S/ {{ item.precioUnitario * item.cantidad }}
+          </div>
+        </div>
+      } @empty {
+        <p style="text-align: center; color: #777; margin-top: 30px;">El carrito está vacío</p>
+      }
+    </div>
+
+    <div style="display: flex; justify-content: space-between; font-size: 1.2em; font-weight: bold; margin-top: 20px; padding-top: 15px; border-top: 2px solid #333;">
+      <span>TOTAL:</span>
+      <span>S/ {{ calcularTotal() }}</span>
+    </div>
+
+    <button (click)="enviarPedido()" style="width: 100%; padding: 15px; background: #28a745; color: white; border: none; font-size: 1.1em; font-weight: bold; margin-top: 20px; cursor: pointer; border-radius: 4px;">
+      Enviar a Cocina
+    </button>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<div style="padding: 20px; font-family: sans-serif; max-width: 900px; margin: auto;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+    <h2 style="margin: 0;">Gestión de Menú</h2>
+    <button (click)="cerrarSesion()" style="padding: 8px 15px; background: #343a40; color: white; border: none; cursor: pointer; border-radius: 4px;">
+      Cerrar Sesión
+    </button>
+  </div>
+
+  <!-- Sección del Formulario -->
+  <div style="background: #f9f9f9; padding: 15px; margin-bottom: 20px; border: 1px solid #ddd;">
+    <h3 style="margin-top: 0;">{{ editando ? 'Editar Plato' : 'Nuevo Plato' }}</h3>
+
+    <div style="display: grid; gap: 10px; grid-template-columns: 1fr 1fr;">
+      <input type="text" placeholder="Nombre" [(ngModel)]="platoActual.nombre" style="padding: 8px;">
+      <input type="number" placeholder="Precio" [(ngModel)]="platoActual.precio" style="padding: 8px;">
+      <input type="text" placeholder="Descripción" [(ngModel)]="platoActual.descripcion" style="padding: 8px; grid-column: span 2;">
+      <label>
+        <input type="checkbox" [(ngModel)]="platoActual.disponible"> Está disponible
+      </label>
+    </div>
+
+    <select [(ngModel)]="platoActual.categoria" style="padding: 10px; margin-bottom: 15px; width: 100%;">
+      <option [ngValue]="null">Seleccione una categoría</option>
+      <option *ngFor="let cat of categorias" [ngValue]="cat">
+        {{ cat.nombre }}
+      </option>
+    </select>
+
+    <div style="margin-top: 15px;">
+      <button (click)="guardarPlato()" style="padding: 8px 15px; background: #28a745; color: white; border: none; cursor: pointer; margin-right: 10px;">
+        {{ editando ? 'Actualizar' : 'Guardar' }}
+      </button>
+      <button *ngIf="editando" (click)="limpiarFormulario()" style="padding: 8px 15px; background: #6c757d; color: white; border: none; cursor: pointer;">
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+  <!-- Sección de la Tabla -->
+  <table border="1" style="width: 100%; text-align: left; border-collapse: collapse;">
+    <thead>
+    <tr style="background-color: #f2f2f2;">
+      <th style="padding: 8px;">ID</th>
+      <th style="padding: 8px;">Categoría</th>
+      <th style="padding: 8px;">Nombre</th>
+      <th style="padding: 8px;">Descripción</th>
+      <th style="padding: 8px;">Precio</th>
+      <th style="padding: 8px;">Disponible</th>
+      <th style="padding: 8px;">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (plato of platos; track $index) {
+        <tr>
+          <td style="padding: 8px;">{{ plato.id }}</td>
+          <td style="padding: 8px;">{{ plato.categoria?.nombre || 'Sin categoría' }}</td>
+          <td style="padding: 8px;">{{ plato.nombre }}</td>
+          <td style="padding: 8px;">{{ plato.descripcion }}</td>
+          <td style="padding: 8px;">S/ {{ plato.precio }}</td>
+          <td style="padding: 8px;">{{ plato.disponible ? 'Sí' : 'No' }}</td>
+          <td style="padding: 8px;">
+            <button (click)="seleccionarPlato(plato)" style="margin-right: 5px; background: #007bff; color: white; border: none; cursor: pointer;">Editar</button>
+            <button (click)="eliminarPlato(plato.id)" style="background: #dc3545; color: white; border: none; cursor: pointer;">Eliminar</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="7" style="text-align: center; padding: 8px;">No hay platos registrados</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
